@@ -1,0 +1,26 @@
+{
+  "name": "facts",
+  "version": "0.0.0",
+  "description": "Declarative Argument Invaraints",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/orodio/facts.git"
+  },
+  "keywords": [
+    "invariant",
+    "facts",
+    "fact",
+    "generative",
+    "testing"
+  ],
+  "author": "orodio <james@bjorkman.ca>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/orodio/facts/issues"
+  },
+  "homepage": "https://github.com/orodio/facts"
+}
