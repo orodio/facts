@@ -4,7 +4,8 @@
   "description": "Declarative Argument Invaraints",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "./node_modules/.bin/mocha ./tests",
+    "build": "./node_modules/.bin/babel ./src/index.js --out-file ./index.js"
   },
   "repository": {
     "type": "git",
@@ -22,5 +23,9 @@
   "bugs": {
     "url": "https://github.com/orodio/facts/issues"
   },
-  "homepage": "https://github.com/orodio/facts"
+  "homepage": "https://github.com/orodio/facts",
+  "devDependencies": {
+    "babel": "^5.6.2",
+    "mocha": "^2.2.5"
+  }
 }
