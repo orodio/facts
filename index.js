@@ -21,29 +21,29 @@ var types = { STRING: Symbol("string"),
 
 var typeStrings = (_typeStrings = {}, _defineProperty(_typeStrings, types.STRING, "string"), _defineProperty(_typeStrings, types.NUMBER, "number"), _defineProperty(_typeStrings, types.BOOLEAN, "boolean"), _defineProperty(_typeStrings, types.OBJECT, "object"), _defineProperty(_typeStrings, types.ARRAY, "array"), _defineProperty(_typeStrings, types.UNDEFINED, "undefined"), _defineProperty(_typeStrings, types.FUNCTION, "function"), _defineProperty(_typeStrings, types.UNKNOWN, "unknown"), _defineProperty(_typeStrings, types.NULL, "null"), _typeStrings);
 
-var is = { STRING: function STRING(thing) {
-    return typeof thing === "string";
+var is = { STRING: function STRING(ent) {
+    return typeof ent === "string";
   },
-  NUMBER: function NUMBER(thing) {
-    return typeof thing === "number";
+  NUMBER: function NUMBER(ent) {
+    return typeof ent === "number";
   },
-  OBJECT: function OBJECT(thing) {
-    return typeof thing === "object";
+  OBJECT: function OBJECT(ent) {
+    return typeof ent === "object";
   },
-  UNDEFINED: function UNDEFINED(thing) {
-    return typeof thing === "undefined";
+  UNDEFINED: function UNDEFINED(ent) {
+    return typeof ent === "undefined";
   },
-  BOOLEAN: function BOOLEAN(thing) {
-    return typeof thing === "boolean";
+  BOOLEAN: function BOOLEAN(ent) {
+    return typeof ent === "boolean";
   },
-  FUNCTION: function FUNCTION(thing) {
-    return typeof thing === "function";
+  FUNCTION: function FUNCTION(ent) {
+    return typeof ent === "function";
   },
-  ARRAY: function ARRAY(thing) {
-    return Array.isArray(thing);
+  ARRAY: function ARRAY(ent) {
+    return Array.isArray(ent);
   },
-  NULL: function NULL(thing) {
-    return thing === null;
+  NULL: function NULL(ent) {
+    return ent === null;
   }
 };
 
@@ -93,7 +93,6 @@ function shape(ent, inv) {
     if (invType === types.ARRAY) return shapeArray(ent, inv);
     return true;
   }
-
   return false;
 }
 

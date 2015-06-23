@@ -23,14 +23,14 @@ const typeStrings =
 }
 
 const is =
-{ STRING    : thing => typeof thing === "string"
-, NUMBER    : thing => typeof thing === "number"
-, OBJECT    : thing => typeof thing === "object"
-, UNDEFINED : thing => typeof thing === "undefined"
-, BOOLEAN   : thing => typeof thing === "boolean"
-, FUNCTION  : thing => typeof thing === "function"
-, ARRAY     : thing => Array.isArray(thing)
-, NULL      : thing => thing === null
+{ STRING    : ent => typeof ent === "string"
+, NUMBER    : ent => typeof ent === "number"
+, OBJECT    : ent => typeof ent === "object"
+, UNDEFINED : ent => typeof ent === "undefined"
+, BOOLEAN   : ent => typeof ent === "boolean"
+, FUNCTION  : ent => typeof ent === "function"
+, ARRAY     : ent => Array.isArray(ent)
+, NULL      : ent => ent === null
 }
 
 function isKnownType(inv) {
@@ -79,7 +79,6 @@ function shape (ent, inv) {
     if (invType === types.ARRAY)  return shapeArray(ent, inv)
     return true
   }
-
   return false
 }
 
