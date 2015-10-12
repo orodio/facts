@@ -4,11 +4,12 @@
   "description": "Declarative Argument Invaraints",
   "main": "dist/facts.min.js",
   "scripts": {
+    "clean": "rm -rf dist; mkdir dist",
     "build:min": "./node_modules/.bin/babel src | uglifyjs --screw-ie8 -mc -o dist/facts.min.js",
     "build:dev": "./node_modules/.bin/babel src --source-maps inline -s -o dist/facts.js",
     "build": "npm run build:dev; npm run build:min",
     "test": "./node_modules/.bin/mocha --compilers js:babel/register ./tests",
-    "prepublish": "npm run build"
+    "prepublish": "npm run clean; npm run build"
   },
   "repository": {
     "type": "git",
