@@ -1,6 +1,6 @@
 {
   "name": "facts",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Declarative Argument Invaraints",
   "main": "dist/facts.min.js",
   "scripts": {
