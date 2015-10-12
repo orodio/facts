@@ -14,7 +14,8 @@ $ npm install facts
 
 ```
   // import shape and types you want
-  import shape, {
+  import {
+    shape,
     STRING,
     NUMBER
   } from "facts"

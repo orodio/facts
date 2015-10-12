@@ -108,7 +108,7 @@ function shape_object (a, b) {
   }))
 }
 
-export default function shape (a, b) {
+export function shape (a, b) {
   if (any(isLiteral, a, b)) return shape_literal(a, b);
   if (any(isArray, a, b))   return shape_array(a, b);
   if (any(isObject, a, b))  return shape_object(a, b);
