@@ -1,85 +1,104 @@
-const types =
-{ STRING    : Symbol("string")
-, NUMBER    : Symbol("number")
-, BOOLEAN   : Symbol("boolean")
-, OBJECT    : Symbol("object")
-, ARRAY     : Symbol("array")
-, UNDEFINED : Symbol("undefined")
-, FUNCTION  : Symbol("function")
-, UNKNOWN   : Symbol("unknown")
-, NULL      : Symbol("null")
-}
+import _ from "lodash"
 
-const typeStrings =
-{ [types.STRING]    : "string"
-, [types.NUMBER]    : "number"
-, [types.BOOLEAN]   : "boolean"
-, [types.OBJECT]    : "object"
-, [types.ARRAY]     : "array"
-, [types.UNDEFINED] : "undefined"
-, [types.FUNCTION]  : "function"
-, [types.UNKNOWN]   : "unknown"
-, [types.NULL]      : "null"
-}
+export const BOOLEAN   = Symbol("boolean");
+export const ARRAY     = Symbol("array");
+export const FUNCTION  = Symbol("function");
+export const NULL      = Symbol("null");
+export const NUMBER    = Symbol("number");
+export const OBJECT    = Symbol("object");
+export const REGEXP    = Symbol("regexp");
+export const STRING    = Symbol("string");
+export const UNDEFINED = Symbol("undefined");
+export const UNKNOWN   = Symbol("unknown");
+export const ANY       = Symbol("any");
 
-const is =
-{ STRING    : ent => typeof ent === "string"
-, NUMBER    : ent => typeof ent === "number"
-, OBJECT    : ent => typeof ent === "object"
-, UNDEFINED : ent => typeof ent === "undefined"
-, BOOLEAN   : ent => typeof ent === "boolean"
-, FUNCTION  : ent => typeof ent === "function"
-, ARRAY     : ent => Array.isArray(ent)
-, NULL      : ent => ent === null
-}
-
-function isKnownType(inv) {
-  return !is.UNDEFINED(typeStrings[inv])
-}
-
-function whatType (ent) {
-  if (isKnownType  (ent)) return ent
-  if (is.NULL      (ent)) return types.NULL
-  if (is.ARRAY     (ent)) return types.ARRAY
-  if (is.OBJECT    (ent)) return types.OBJECT
-  if (is.STRING    (ent)) return types.STRING
-  if (is.FUNCTION  (ent)) return types.FUNCTION
-  if (is.NUMBER    (ent)) return types.NUMBER
-  if (is.BOOLEAN   (ent)) return types.BOOLEAN
-  if (is.UNDEFINED (ent)) return types.UNDEFINED
-  return types.UNKNOWN
-}
-
-function shapeObject (ent, inv) {
-  if (inv === types.OBJECT) return true
-  const invKeys = Object.keys(inv)
-  __loop: while (true) {
-    if (!invKeys.length) return true
-    const key = invKeys.pop()
-    if (shape(ent[key], inv[key])) continue __loop
-    return false
+function checker (func, symb) {
+  return function (v) {
+    return func(v) || v === symb;
   }
 }
 
-function shapeArray (ents, inv) {
-  if (inv === types.ARRAY) return true
-  if (!inv.length) return true
-  __loop: while (true) {
-    if (!ents.length) return true
-    if (shape(ents.pop(), inv[0])) continue __loop
-    return false
+export const isBoolean   = checker(_.isBoolean,   BOOLEAN);
+export const isArray     = checker(_.isArray,     ARRAY);
+export const isFunction  = checker(_.isFunction,  FUNCTION);
+export const isNull      = checker(_.isNull,      NULL);
+export const isNumber    = checker(_.isNumber,    NUMBER);
+export const isObject    = checker(_.isObject,    OBJECT);
+export const isRegExp    = checker(_.isRegExp,    REGEXP);
+export const isString    = checker(_.isString,    STRING);
+export const isUndefined = checker(_.isUndefined, UNDEFINED);
+
+function isLiteral (v) {
+  switch (v) {
+    case BOOLEAN:
+    case ARRAY:
+    case FUNCTION:
+    case NULL:
+    case NUMBER:
+    case OBJECT:
+    case REGEXP:
+    case STRING:
+    case UNDEFINED:
+    case UNKNOWN:
+    case ANY:
+      return true;
+    default:
+      return false;
   }
 }
 
-function shape (ent, inv) {
-  const entType = whatType(ent)
-  const invType = whatType(inv)
-  if (entType === invType) {
-    if (invType === types.OBJECT) return shapeObject(ent, inv)
-    if (invType === types.ARRAY)  return shapeArray(ent, inv)
-    return true
-  }
-  return false
+function theTypes () {
+  return [
+    [STRING,    isString],
+    [NUMBER,    isNumber],
+    [FUNCTION,  isFunction],
+    [ARRAY,     isArray],
+    [REGEXP,    isRegExp],
+    [OBJECT,    isObject],
+    [BOOLEAN,   isBoolean],
+    [UNDEFINED, isUndefined],
+    [NULL,      isNull],
+  ]
 }
 
-export default Object.assign({shape, whatType, typeStrings}, types)
+export function whatType (v) {
+  let types = theTypes();
+
+  __loop: while (1) {
+    if (!types.length) return UNKNOWN;
+    const [ type, isType ] = types.shift();
+    if (isType(v)) return type;
+    continue __loop;
+  }
+}
+
+function any (pred, ...shapes) {
+  return _.any([for (s of shapes) pred(s)]);
+}
+
+function shape_literal(a, b) {
+  if (a === ANY || b === ANY) return true;
+  return whatType(a) === whatType(b);
+}
+
+function shape_array (a, b) {
+  if (!isArray(a) || !isArray(b)) return false;
+  if (a.length === 0 && a.length === 0) return true;
+  return _.all(_.zipWith(a, b, shape))
+}
+
+function shape_object (a, b) {
+  if (!isObject(a) || !isObject(b)) return false;
+  if (Object.keys(a).length !== Object.keys(b).length) return false;
+  return _.all(_.map(a, (value, key) => {
+    if (b[key] == null) return false;
+    return shape(a[key], b[key])
+  }))
+}
+
+export default function shape (a, b) {
+  if (any(isLiteral, a, b)) return shape_literal(a, b);
+  if (any(isArray, a, b))   return shape_array(a, b);
+  if (any(isObject, a, b))  return shape_object(a, b);
+  return a === b;
+}

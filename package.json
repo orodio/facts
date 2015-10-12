@@ -1,11 +1,13 @@
 {
   "name": "facts",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Declarative Argument Invaraints",
-  "main": "index.js",
+  "main": "dist/facts.min.js",
   "scripts": {
-    "test": "./node_modules/.bin/mocha ./tests",
-    "build": "./node_modules/.bin/babel ./src/index.js --out-file ./index.js"
+    "build:min": "./node_modules/.bin/babel src | uglifyjs --screw-ie8 -mc -o dist/facts.min.js",
+    "build:dev": "./node_modules/.bin/babel src --source-maps inline -s -o dist/facts.js",
+    "build": "npm run build:dev; npm run build:min",
+    "test": "./node_modules/.bin/mocha --compilers js:babel/register ./tests"
   },
   "repository": {
     "type": "git",
@@ -19,13 +21,18 @@
     "testing"
   ],
   "author": "orodio <james@bjorkman.ca>",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/orodio/facts/issues"
   },
   "homepage": "https://github.com/orodio/facts",
   "devDependencies": {
-    "babel": "^5.6.2",
-    "mocha": "^2.2.5"
+    "babel": "5.8.23",
+    "babel-plugin-lodash": "^0.2.0",
+    "mocha": "2.3.3",
+    "uglify-js": "2.4.24"
+  },
+  "dependencies": {
+    "lodash": "^3.10.1"
   }
 }
