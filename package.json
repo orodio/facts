@@ -1,8 +1,8 @@
 {
   "name": "facts",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Declarative Argument Invaraints",
-  "main": "dist/facts.min.js",
+  "main": "dist/facts.js",
   "scripts": {
     "build": "./node_modules/.bin/browserify src --standalone facts -t babelify | uglifyjs --screw-ie8 -mc -o dist/facts.js",
     "test": "./node_modules/.bin/mocha --compilers js:babel/register ./tests"
