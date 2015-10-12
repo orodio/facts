@@ -1,13 +1,11 @@
 {
   "name": "facts",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Declarative Argument Invaraints",
   "main": "dist/facts.min.js",
   "scripts": {
     "clean": "rm -rf dist; mkdir dist",
-    "build:min": "./node_modules/.bin/babel src | uglifyjs --screw-ie8 -mc -o dist/facts.min.js",
-    "build:dev": "./node_modules/.bin/babel src --source-maps inline -s -o dist/facts.js",
-    "build": "npm run build:dev; npm run build:min",
+    "build": "./node_modules/.bin/webpack",
     "test": "./node_modules/.bin/mocha --compilers js:babel/register ./tests",
     "prepublish": "npm run clean; npm run build"
   },
